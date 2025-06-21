@@ -11,6 +11,8 @@ namespace Tournament.Data.Entities
         public int Id { get; set; }
         public string Title { get; set; }
         public DateTime Time { get; set; }
-        public int TournamentId { get; set; }
+        public int TournamentDetailsId { get; set; }
+        // Navigation property to TournamentDetails
+        public TournamentDetails? TournamentDetails { get; set; }
     }
 }
