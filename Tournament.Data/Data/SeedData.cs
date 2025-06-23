@@ -26,7 +26,13 @@ public static class SeedData
                     Title = "Summer Showdown",                           
                     StartDate = DateTime.UtcNow.AddDays(60), 
                     Games = GenerateGames("Summer Showdown")
-                }
+                },
+                new TournamentDetails
+                {
+                    Title = "Autumn Clash",                           
+                    StartDate = DateTime.UtcNow.AddDays(90),
+                    Games = GenerateGames("Autumn Clash")
+                },
             };
         return tournaments;
     }
@@ -42,6 +48,11 @@ public static class SeedData
              new Game
             {
                 Title = tournamentTitle + " Game 2",
+                Time = DateTime.UtcNow
+            },
+              new Game
+            {
+                Title = tournamentTitle + " Game 3",
                 Time = DateTime.UtcNow
             }
         };

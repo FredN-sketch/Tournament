@@ -25,7 +25,10 @@ namespace Tournament.Api.Extensions
                     db.AddRange(tournaments);
                     await db.SaveChangesAsync();
                 }
-                catch (Exception ex) { throw; }
+                catch (Exception ex) 
+                { 
+                    throw; 
+                }
 
                
             }
