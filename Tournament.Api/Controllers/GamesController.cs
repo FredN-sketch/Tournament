@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tournament.Data.Data;
-using Tournament.Data.Entities;
+using Tournament.Core.Entities;
 
 namespace Tournament.Api.Controllers
 {

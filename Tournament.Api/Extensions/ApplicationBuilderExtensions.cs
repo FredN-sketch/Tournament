@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tournament.Data.Data;
-using Tournament.Data.Entities;
+using Tournament.Core.Entities;
 
 namespace Tournament.Api.Extensions
 {
@@ -25,7 +25,7 @@ namespace Tournament.Api.Extensions
                     db.AddRange(tournaments);
                     await db.SaveChangesAsync();
                 }
-                catch (Exception ex) 
+                catch (Exception) 
                 { 
                     throw; 
                 }

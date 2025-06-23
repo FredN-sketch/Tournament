@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tournament.Data.Entities;
+using Tournament.Core.Entities;
 
 namespace Tournament.Data.Data;
 
@@ -18,13 +18,13 @@ public static class SeedData
                 {
                    
                     Title = "Spring Championship",                           
-                    StartDate = DateTime.UtcNow.AddDays(30),
+                    StartDate = DateTime.UtcNow.AddDays(-60),
                     Games = GenerateGames("Spring Championship")
                 },
                 new TournamentDetails
                 {
                     Title = "Summer Showdown",                           
-                    StartDate = DateTime.UtcNow.AddDays(60), 
+                    StartDate = DateTime.UtcNow.AddDays(0), 
                     Games = GenerateGames("Summer Showdown")
                 },
                 new TournamentDetails
