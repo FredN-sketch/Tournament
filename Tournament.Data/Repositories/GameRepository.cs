@@ -13,6 +13,7 @@ namespace Tournament.Data.Repositories;
 public class GameRepository : IGameRepository
 {
     private readonly TournamentApiContext _context;
+
     public GameRepository(TournamentApiContext context)
     {
         _context = context;
@@ -21,9 +22,9 @@ public class GameRepository : IGameRepository
     {
         var games = await _context.Game            
             .ToListAsync();
-        return await _context.Game.ToListAsync();
+        return games;
     }
-    public async Task<Game> GetAsync(int id)
+    public async Task<Game?> GetAsync(int id)
     {
         return await _context.Game.FindAsync(id);
     }

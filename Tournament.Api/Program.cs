@@ -2,7 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Tournament.Api.Extensions;
+using Tournament.Core.Repositories;
 using Tournament.Data.Data;
+using Tournament.Data.Repositories;
+
 namespace Tournament.Api;
 
 public class Program
@@ -21,6 +24,7 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); // Register the UnitOfWork service.
 
         var app = builder.Build();
         await app.SeedDataAsync(); // Seed the database with initial data. To be implemented in the ApplicationBuilderExtensions class.

@@ -22,20 +22,15 @@ public class TournamentRepository : ITournamentRepository
     {
         var tournaments = await _context.TournamentDetails.ToListAsync();
         return tournaments;
-
     }
-    public async Task<TournamentDetails> GetAsync(int id) => await _context.TournamentDetails
-        .FindAsync(id);
+    public async Task<TournamentDetails?> GetAsync(int id)
+    {
+        return await _context.TournamentDetails.FindAsync(id);    
+    }
 
     public async Task<bool> AnyAsync(int id)
     {
-        var tournamentDetails = await _context.TournamentDetails.FindAsync(id);
-
-        if (tournamentDetails == null)
-        {
-            return false;
-        }
-        return true;
+        return await _context.TournamentDetails.AnyAsync(e => e.Id == id);
     }
     public void Add(TournamentDetails tournamentDetails)
     {
