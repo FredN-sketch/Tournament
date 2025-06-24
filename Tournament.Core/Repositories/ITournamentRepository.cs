@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Tournament.Core.Entities;
 
-namespace Tournament.Core.Repositories
+namespace Tournament.Core.Repositories;
+
+public interface ITournamentRepository
 {
-    public interface ITournamentRepository
-    {
-        Task<IEnumerable<TournamentDetails>> GetAllTournamentsAsync();
-        Task<TournamentDetails> GetTournamentByIdAsync(Guid tournamentId);
-        Task AddTournamentAsync(TournamentDetails tournament);
-        Task UpdateTournamentAsync(TournamentDetails tournament);
-        Task DeleteTournamentAsync(Guid tournamentId);
-    }
+    Task<IEnumerable<TournamentDetails>> GetAllAsync();
+    Task<TournamentDetails> GetAsync(int id);
+    Task<bool> AnyAsync(int id);
+    void Add(TournamentDetails tournamentDetails);
+    void Update(TournamentDetails tournamentDetails);
+    void Remove (TournamentDetails tournamentDetails);
 }
