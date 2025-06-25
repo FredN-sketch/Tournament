@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Tournament.Data.Data;
 using Tournament.Core.Entities;
 using Tournament.Core.Repositories;
+using AutoMapper;
+using Tournament.Core.Dto;
 
 namespace Tournament.Api.Controllers
 {
@@ -16,26 +18,30 @@ namespace Tournament.Api.Controllers
     public class TournamentDetailsController : ControllerBase
     {
         //private readonly TournamentApiContext _context;
+        private readonly IMapper _mapper;
         private readonly IUnitOfWork _uow;
-        public TournamentDetailsController(IUnitOfWork uow)
+        public TournamentDetailsController(IMapper mapper, IUnitOfWork uow)
         {
-           _uow = uow;
+            _mapper = mapper;
+            _uow = uow;
         }
 
         // GET: api/TournamentDetails
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TournamentDetails>>> GetTournamentDetails()
+        public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournamentDetails()
         {
             //return await _context.TournamentDetails.ToListAsync();
-            var tournaments = await _uow.TournamentRepository.GetAllAsync();
+            //var tournaments = await _uow.TournamentRepository.GetAllAsync();
+            var tournaments = _mapper.Map<IEnumerable<TournamentDto>>(await _uow.TournamentRepository.GetAllAsync());
             return Ok(tournaments);
         }
 
         // GET: api/TournamentDetails/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TournamentDetails>> GetTournamentDetails(int id)
+        public async Task<ActionResult<TournamentDto>> GetTournamentDetails(int id)
         {
-            var tournamentDetails = await _uow.TournamentRepository.GetAsync(id);
+            //var tournamentDetails = await _uow.TournamentRepository.GetAsync(id);
+            var tournamentDetails = _mapper.Map<TournamentDto>(await _uow.TournamentRepository.GetAsync(id));
 
             if (tournamentDetails == null)
             {
@@ -48,14 +54,23 @@ namespace Tournament.Api.Controllers
         // PUT: api/TournamentDetails/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTournamentDetails(int id, TournamentDetails tournamentDetails)
+        public async Task<IActionResult> PutTournamentDetails(int id, TournamentDto dto)
         {
-            if (id != tournamentDetails.Id)
+            if (id != dto.Id)
             {
                 return BadRequest();
             }
 
-            _uow.TournamentRepository.Update(tournamentDetails);
+            // _uow.TournamentRepository.Update(dto);
+            var existingTournament = await _uow.TournamentRepository.GetAsync(id);
+            if (existingTournament == null)
+            {
+                return NotFound("Company does not exist");
+            }
+
+            _mapper.Map(dto, existingTournament);
+
+
             await _uow.CompleteAsync();
             //_context.Entry(tournamentDetails).State = EntityState.Modified;
 
@@ -81,12 +96,14 @@ namespace Tournament.Api.Controllers
         // POST: api/TournamentDetails
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TournamentDetails>> PostTournamentDetails(TournamentDetails tournamentDetails)
+        public async Task<ActionResult<TournamentDto>> PostTournamentDetails(TournamentDto dto)
         {
+            var tournamentDetails = _mapper.Map<TournamentDetails>(dto);
+
             _uow.TournamentRepository.Add(tournamentDetails);
             await _uow.CompleteAsync();
-
-            return CreatedAtAction("GetTournamentDetails", new { id = tournamentDetails.Id }, tournamentDetails);
+            var createdTournament = _mapper.Map<TournamentDto>(tournamentDetails);
+            return CreatedAtAction(nameof(GetTournamentDetails), new { id = tournamentDetails.Id }, tournamentDetails);
         }
 
         // DELETE: api/TournamentDetails/5

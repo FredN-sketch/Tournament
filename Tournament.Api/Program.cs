@@ -24,6 +24,7 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddAutoMapper(typeof(TournamentMappings)); // Register AutoMapper for mapping DTOs and entities.
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); // Register the UnitOfWork service.
 
         var app = builder.Build();

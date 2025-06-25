@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,12 +16,14 @@ namespace Tournament.Api.Controllers
     [ApiController]
     public class GamesController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IUnitOfWork _uow;
         //private readonly TournamentApiContext _context;
 
-        public GamesController(IUnitOfWork uow)
+        public GamesController(IMapper mapper, IUnitOfWork uow)
         {
            // _context = context;
+           _mapper = mapper;
            _uow = uow;
         }
 
