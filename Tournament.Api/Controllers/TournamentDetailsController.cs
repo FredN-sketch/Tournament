@@ -48,7 +48,7 @@ namespace Tournament.Api.Controllers
                 return NotFound();
             }
 
-            return tournamentDetails;
+            return Ok(tournamentDetails);
         }
 
         // PUT: api/TournamentDetails/5
@@ -71,25 +71,15 @@ namespace Tournament.Api.Controllers
             _mapper.Map(dto, existingTournament);
 
 
-            await _uow.CompleteAsync();
-            //_context.Entry(tournamentDetails).State = EntityState.Modified;
-
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!TournamentDetailsExists(id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-
+            try
+            {
+                await _uow.CompleteAsync();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }  
+            
             return NoContent();
         }
 
@@ -101,7 +91,14 @@ namespace Tournament.Api.Controllers
             var tournamentDetails = _mapper.Map<TournamentDetails>(dto);
 
             _uow.TournamentRepository.Add(tournamentDetails);
-            await _uow.CompleteAsync();
+            try
+            {
+                await _uow.CompleteAsync();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
             var createdTournament = _mapper.Map<TournamentDto>(tournamentDetails);
             return CreatedAtAction(nameof(GetTournamentDetails), new { id = tournamentDetails.Id }, createdTournament);
         }
@@ -117,7 +114,14 @@ namespace Tournament.Api.Controllers
             }
 
             _uow.TournamentRepository.Remove(tournamentDetails);
-            await _uow.CompleteAsync();
+            try
+            {
+                await _uow.CompleteAsync();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
 
             return NoContent();
         }

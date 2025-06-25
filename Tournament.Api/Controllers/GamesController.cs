@@ -69,7 +69,14 @@ namespace Tournament.Api.Controllers
             }
 
             _mapper.Map(dto, existingGame);
-            await _uow.CompleteAsync();
+            try
+            {
+                await _uow.CompleteAsync();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
             //_context.Entry(game).State = EntityState.Modified;
 
             //try
@@ -98,7 +105,14 @@ namespace Tournament.Api.Controllers
         {
             var game = _mapper.Map<Game>(dto);
             _uow.GameRepository.Add(game);
-            await _uow.CompleteAsync();
+            try
+            {
+                await _uow.CompleteAsync();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
 
             var createdGame = _mapper.Map<GameDto>(game);
             return CreatedAtAction(nameof(GetGame), new { id = game.Id }, createdGame);
@@ -115,7 +129,14 @@ namespace Tournament.Api.Controllers
             }
 
             _uow.GameRepository.Remove(game);
-            await _uow.CompleteAsync();
+            try
+            {
+                await _uow.CompleteAsync();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
 
             return NoContent();
         }
