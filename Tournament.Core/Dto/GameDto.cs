@@ -8,6 +8,7 @@ namespace Tournament.Core.Dto
 {
     public record GameDto
     {
+        public int Id { get; init; } // Added for HttpPut
         public string? Title { get; init; }
         public DateTime Time { get; init; }
     }

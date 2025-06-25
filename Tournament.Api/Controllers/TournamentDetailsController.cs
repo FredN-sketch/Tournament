@@ -65,7 +65,7 @@ namespace Tournament.Api.Controllers
             var existingTournament = await _uow.TournamentRepository.GetAsync(id);
             if (existingTournament == null)
             {
-                return NotFound("Company does not exist");
+                return NotFound("Tournament does not exist");
             }
 
             _mapper.Map(dto, existingTournament);
@@ -103,7 +103,7 @@ namespace Tournament.Api.Controllers
             _uow.TournamentRepository.Add(tournamentDetails);
             await _uow.CompleteAsync();
             var createdTournament = _mapper.Map<TournamentDto>(tournamentDetails);
-            return CreatedAtAction(nameof(GetTournamentDetails), new { id = tournamentDetails.Id }, tournamentDetails);
+            return CreatedAtAction(nameof(GetTournamentDetails), new { id = tournamentDetails.Id }, createdTournament);
         }
 
         // DELETE: api/TournamentDetails/5
