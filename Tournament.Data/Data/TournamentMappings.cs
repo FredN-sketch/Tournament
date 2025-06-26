@@ -15,7 +15,7 @@ namespace Tournament.Data.Data
         {
             CreateMap<TournamentDetails, TournamentDto>().ReverseMap(); 
             CreateMap<Game, GameDto>().ReverseMap();
-            CreateMap<GameCreateDto, Game>();
+            CreateMap<GameCreateDto, Game>().ReverseMap();
                 //.ForMember(dest => dest.Id, opt => opt.Ignore())
                 //.ForMember(dest => dest.TournamentDetails, opt => opt.Ignore()); // Ignore navigation property
         }

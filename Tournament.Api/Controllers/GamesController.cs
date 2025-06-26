@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -138,6 +139,39 @@ namespace Tournament.Api.Controllers
                 return StatusCode(500);
             }
 
+            return NoContent();
+        }
+        [HttpPatch("{gameId}")]
+        public async Task<IActionResult> PatchGame(int gameId, [FromBody] JsonPatchDocument<GameCreateDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest("Invalid patch document.");
+            }
+            if (!await GameExistsAsync(gameId))
+            {
+                return NotFound("Game does not exist");
+            }
+            var existingGame = await _uow.GameRepository.GetAsync(gameId);
+            if (existingGame == null)
+            {
+                return NotFound("Game does not exist");
+            }
+            var dto = _mapper.Map<GameCreateDto>(existingGame);
+            patchDoc.ApplyTo(dto, ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _mapper.Map(dto, existingGame);
+            try
+            {
+                await _uow.CompleteAsync();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
             return NoContent();
         }
 

@@ -10,6 +10,7 @@ using Tournament.Core.Entities;
 using Tournament.Core.Repositories;
 using AutoMapper;
 using Tournament.Core.Dto;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Tournament.Api.Controllers
 {
@@ -123,6 +124,35 @@ namespace Tournament.Api.Controllers
                 return StatusCode(500);
             }
 
+            return NoContent();
+        }
+        [HttpPatch("{tournamentId}")]
+        public async Task<IActionResult> PatchTournamentDetails(int tournamentId, [FromBody] JsonPatchDocument<TournamentDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest("Invalid patch document.");
+            }
+            var tournamentDetails = await _uow.TournamentRepository.GetAsync(tournamentId);
+            if (tournamentDetails == null)
+            {
+                return NotFound("Tournament does not exist");
+            }
+            var tournamentDto = _mapper.Map<TournamentDto>(tournamentDetails);
+            patchDoc.ApplyTo(tournamentDto, ModelState);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _mapper.Map(tournamentDto, tournamentDetails);
+            try
+            {
+                await _uow.CompleteAsync();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
             return NoContent();
         }
 
