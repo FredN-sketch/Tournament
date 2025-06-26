@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Core.Entities;
 
 namespace Tournament.Core.Dto
 {
@@ -15,5 +16,6 @@ namespace Tournament.Core.Dto
         public string? Title { get; init; }
         public DateTime StartDate { get; init; } = StartDate;
         public DateTime EndDate { get; init; } = StartDate.AddMonths(3);
+        public ICollection<GameDto>? Games { get; init; }
     }
 }

@@ -18,14 +18,20 @@ public class TournamentRepository : ITournamentRepository
     {
         _context = context;
     }
-    public async Task<IEnumerable<TournamentDetails>> GetAllAsync()
+    public async Task<IEnumerable<TournamentDetails>> GetAllAsync(bool includeGames = false)
     {
-        var tournaments = await _context.TournamentDetails.ToListAsync();
+        var tournaments = includeGames 
+            ? await _context.TournamentDetails.Include(t => t.Games).ToListAsync() 
+            : await _context.TournamentDetails.ToListAsync();
         return tournaments;
     }
-    public async Task<TournamentDetails?> GetAsync(int id)
+    public async Task<TournamentDetails?> GetAsync(int id, bool includeGames = false)
     {
-        return await _context.TournamentDetails.FindAsync(id);    
+        return includeGames
+            ? await _context.TournamentDetails
+                .Include(t => t.Games)
+                .FirstOrDefaultAsync(t => t.Id == id) 
+            : await _context.TournamentDetails.FindAsync(id); 
     }
 
     public async Task<bool> AnyAsync(int id)

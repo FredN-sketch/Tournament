@@ -29,20 +29,24 @@ namespace Tournament.Api.Controllers
 
         // GET: api/TournamentDetails
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournamentDetails()
+        public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournamentDetails(bool includeGames)
         {
             //return await _context.TournamentDetails.ToListAsync();
             //var tournaments = await _uow.TournamentRepository.GetAllAsync();
-            var tournaments = _mapper.Map<IEnumerable<TournamentDto>>(await _uow.TournamentRepository.GetAllAsync());
+            var tournaments = includeGames 
+                ? _mapper.Map<IEnumerable<TournamentDto>>(await _uow.TournamentRepository.GetAllAsync(true))
+                : _mapper.Map<IEnumerable<TournamentDto>>(await _uow.TournamentRepository.GetAllAsync());
             return Ok(tournaments);
         }
 
         // GET: api/TournamentDetails/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TournamentDto>> GetTournamentDetails(int id)
+        public async Task<ActionResult<TournamentDto>> GetTournamentDetails(int id, bool includeGames)
         {
             //var tournamentDetails = await _uow.TournamentRepository.GetAsync(id);
-            var tournamentDetails = _mapper.Map<TournamentDto>(await _uow.TournamentRepository.GetAsync(id));
+            var tournamentDetails = includeGames
+                ? _mapper.Map<TournamentDto>(await _uow.TournamentRepository.GetAsync(id, true))
+                : _mapper.Map<TournamentDto>(await _uow.TournamentRepository.GetAsync(id));
 
             if (tournamentDetails == null)
             {
