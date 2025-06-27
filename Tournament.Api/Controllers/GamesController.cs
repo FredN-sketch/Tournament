@@ -40,10 +40,22 @@ namespace Tournament.Api.Controllers
         }
 
         // GET: api/Games/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<GameDto>> GetGame(int id)
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<GameDto>> GetGame(int id)
+        //{
+        //    var game = _mapper.Map<GameDto>(await _uow.GameRepository.GetAsync(id));
+
+        //    if (game == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return game;
+        //}
+        [HttpGet("{searchTitle}")]
+        public async Task<ActionResult<GameDto>> GetGame(string searchTitle)
         {
-            var game = _mapper.Map<GameDto>(await _uow.GameRepository.GetAsync(id));
+            var game = _mapper.Map<GameDto>(await _uow.GameRepository.GetAsync(searchTitle));
 
             if (game == null)
             {

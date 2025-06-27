@@ -7,6 +7,7 @@ using Tournament.Core.Entities;
 using Tournament.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Tournament.Data.Data;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Tournament.Data.Repositories;
 
@@ -43,5 +44,11 @@ public class GameRepository : IGameRepository
     public void Remove(Game game)
     {
         _context.Game.Remove(game);      
+    }
+
+    public async Task<Game?> GetAsync(string title) 
+    {
+        // return await _context.Game.FindAsync(title);
+        return await _context.Game.FirstOrDefaultAsync(g => g.Title == title);// ??  //throw new KeyNotFoundException($"Game with title '{title}' not found.");
     }
 }
