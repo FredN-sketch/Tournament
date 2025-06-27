@@ -22,7 +22,7 @@ namespace Tournament.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Tournament.Data.Entities.Game", b =>
+            modelBuilder.Entity("Tournament.Core.Entities.Game", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -35,7 +35,8 @@ namespace Tournament.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("TournamentDetailsId")
                         .HasColumnType("int");
@@ -47,7 +48,7 @@ namespace Tournament.Data.Migrations
                     b.ToTable("Game");
                 });
 
-            modelBuilder.Entity("Tournament.Data.Entities.TournamentDetails", b =>
+            modelBuilder.Entity("Tournament.Core.Entities.TournamentDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,16 +61,17 @@ namespace Tournament.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
                     b.ToTable("TournamentDetails");
                 });
 
-            modelBuilder.Entity("Tournament.Data.Entities.Game", b =>
+            modelBuilder.Entity("Tournament.Core.Entities.Game", b =>
                 {
-                    b.HasOne("Tournament.Data.Entities.TournamentDetails", "TournamentDetails")
+                    b.HasOne("Tournament.Core.Entities.TournamentDetails", "TournamentDetails")
                         .WithMany("Games")
                         .HasForeignKey("TournamentDetailsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -78,7 +80,7 @@ namespace Tournament.Data.Migrations
                     b.Navigation("TournamentDetails");
                 });
 
-            modelBuilder.Entity("Tournament.Data.Entities.TournamentDetails", b =>
+            modelBuilder.Entity("Tournament.Core.Entities.TournamentDetails", b =>
                 {
                     b.Navigation("Games");
                 });
