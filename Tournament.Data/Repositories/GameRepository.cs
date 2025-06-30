@@ -19,11 +19,14 @@ public class GameRepository : IGameRepository
     {
         _context = context;
     }
-    public async Task<IEnumerable<Game>> GetAllAsync()
+    public async Task<IEnumerable<Game>> GetAllAsync(bool sortByTitle = false)
     {
         var games = await _context.Game            
             .ToListAsync();
-        return games;
+        var sortedGames = sortByTitle
+            ? games.OrderBy(g => g.Title).ToList() 
+            : games;
+        return sortedGames;
     }
     public async Task<Game?> GetAsync(int id)
     {
